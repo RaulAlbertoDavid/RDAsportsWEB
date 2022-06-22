@@ -14,3 +14,6 @@ class session_controller {
         return session_model::delete($session_id);
     }
 }
+
+$controlador = new session_controller();
+require_once("session_forms/add_session.php");

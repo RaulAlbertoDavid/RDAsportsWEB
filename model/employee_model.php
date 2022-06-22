@@ -47,8 +47,8 @@ class employee_model {
             $sql = "SELECT EMPLOYEE_ID, NAME, EMAIL, PHONE, ACTIVE FROM EMPLOYEES WHERE EMAIL=:email AND PASSWORD=:password";
             $respuesta = $conexion->prepare($sql);
             $respuesta->execute(array(':email'=>$email, ':password'=>$password));
-//            $respuesta->execute(array(':email'=>"email@example.com", ':password'=>"1234"));
             $respuesta = $respuesta->fetch(PDO::FETCH_ASSOC);
+
             // Si el array no está vacío, crea y devuelve un objeto Usuario.
             if($respuesta){
                 $employee = new Employee_model($respuesta["EMPLOYEE_ID"], $respuesta["NAME"], $respuesta["EMAIL"], $respuesta["PHONE"], $respuesta["ACTIVE"]);

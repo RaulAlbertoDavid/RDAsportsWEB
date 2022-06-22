@@ -29,7 +29,13 @@ class employee_controller {
     public function cerrar() {
         $_SESSION = array();
         session_destroy();
-        header("Location: ../view/index.php");
+        header("Location: ../view/login.php");
+    }
+
+    public function logout() {
+        $_SESSION = array();
+        session_destroy();
+        header("Location: ../view/login_en.php");
     }
 }
 
@@ -43,9 +49,10 @@ if(isset($_GET["cerrar"])){
     $controlador->cerrar();
 }
 
+if(isset($_GET["logout"])){
+    $controlador->logout();
+}
+
 /* Cada require contiene las validaciones de formularios y acciones a realizar en la DDBB a través de modelo/Usuarios_modelo */
 require_once("employee_forms/employee_login.php");
-//require_once("usuario_forms/usuario_registrar.php");
-//require_once("usuario_forms/usuario_modificar.php");
-//require_once("usuario_forms/usuario_eliminar.php");
-//require_once("usuario_forms/usuario_cambiapass.php");
+require_once("employee_forms/employee_login_en.php");

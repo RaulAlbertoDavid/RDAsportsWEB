@@ -37,7 +37,6 @@ class customer_model {
      */
     public static function get_customer($email, $password){
         try{
-            $password = self::cryptconmd5($password);
             $conexion = Conectar::Conexion();
 
             //Si $conexion es de tipo String, es porque se produjo una excepción. Para la ejecución de la función devolviendo el mensaje de la excepción.
@@ -78,7 +77,6 @@ class customer_model {
      */
     public static function registrar($customer, $password){
         try{
-            $password = self::cryptconmd5($password);
             $conexion = Conectar::Conexion();
             if(gettype($conexion) == "string"){
                 return $conexion;
@@ -86,7 +84,7 @@ class customer_model {
 
             $sql = "INSERT INTO CUSTOMERS (NAME, EMAIL, PHONE, BIRTH_DATE, PASSWORD) VALUES (:NAM, :EMA, :PHO, :BIR, :PASS)";
             $respuesta = $conexion->prepare($sql);
-            $respuesta = $respuesta->execute(array(":NAM"=>$customer->name, ":EMA"=>$customer->nombre, ":PHO"=>$customer->apellido, ":BIR"=>$customer->email, ":PASS"=>$password));
+            $respuesta = $respuesta->execute(array(":NAM"=>$customer->name, ":EMA"=>$customer->email, ":PHO"=>$customer->phone, ":BIR"=>$customer->birth_date, ":PASS"=>$password));
             return $respuesta;
 
             $respuesta->closeCursor();

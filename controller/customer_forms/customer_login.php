@@ -8,7 +8,7 @@ if(!empty($_SESSION["formdatalogin"])){
     //elimina espacios en blanco del principio y final
     $email = trim($_SESSION["formdatalogin"]["email"]);
     // si get["login] es no...
-    if(($_GET["login_employee"]=="no")){
+    if(($_GET["login"]=="no")){
         echo $_SESSION["mensajelogin"];
         //si get["campo"] está instanciada...
         if(!empty($_GET["campo"])){
@@ -23,7 +23,7 @@ if(!empty($_SESSION["formdatalogin"])){
 FORMULARIO LOGIN
 Validación de formulario y ejecución de consulta
  ***********************************************/
-if(!empty($_POST["login_employee"])){
+if(!empty($_POST["login_customer"])){
     /*******************
     VALIDACION DE CAMPOS
     recorre los datos enviados por formulario.
@@ -35,7 +35,7 @@ if(!empty($_POST["login_employee"])){
         if($value == ""){
             $validacion=false;
             $mensaje = '<p class="error-form">El campo <b>'.$key.'</b> no puede estár vacío</p>'; //asigna mensaje de error.
-            header("Location:". $_SERVER['PHP_SELF']."?login_employee=no&campo=$key"); //redirecciona detallando el campo que falló.
+            header("Location:". $_SERVER['PHP_SELF']."?login=no&campo=$key"); //redirecciona detallando el campo que falló.
             break;
         }
     }
@@ -43,26 +43,26 @@ if(!empty($_POST["login_employee"])){
     // si $validacion es true...
     if($validacion){
         // Llama función iniciar_sesion() que devuelve un objeto usuario
-        $controlador = new employee_controller();
-        $employee = $controlador->iniciar_sesion($_POST["email"], $_POST["password"]);
-        // Si $employee es un string, es porque se produjo un error
-        if(gettype($employee) == "string"){
+        $controlador = new customer_controller();
+        $customer = $controlador->iniciar_sesion($_POST["email"], $_POST["password"]);
+        // Si $customer es un string, es porque se produjo un error
+        if(gettype($customer) == "string"){
             $_SESSION["formdatalogin"] = $_POST; // almacena los datos enviados por formulario
-            $_SESSION["mensajelogin"] = $employee; // almacena el mensaje de error
-            header("Location:". $_SERVER['PHP_SELF']."?login_employee=no");
-            // si $employee es null significa que el email o la contraseña son incorrectos.
-        }elseif($employee == null){
+            $_SESSION["mensajelogin"] = $customer; // almacena el mensaje de error
+            header("Location:". $_SERVER['PHP_SELF']."?login=no");
+            // si $customer es null significa que el email o la contraseña son incorrectos.
+        }elseif($customer == null){
             $_SESSION["formdatalogin"] = $_POST; // almacena datos enviados por formulario.
             $_SESSION["mensajelogin"] = '<p class="error-form">Email y/o Contraseña incorrecta</p>'; // almacena el mensaje de error.
-            header("Location:". $_SERVER['PHP_SELF']."?login_employee=no");
+            header("Location:". $_SERVER['PHP_SELF']."?login=no");
             // Si $usuario es un objeto...
         }else{
             //Asigna las variables de sesión.
-            $_SESSION["NAME"] = $employee->name;
-            $_SESSION["EMAIL"] = $employee->email;
-            $_SESSION["PHONE"] = $employee->phone;
-            $_SESSION["ACTIVE"] = $employee->active;
-            $_SESSION["EMPLOYEE_ID"] = $employee->employee_id;
+            $_SESSION["NAME"] = $customer->name;
+            $_SESSION["EMAIL"] = $customer->email;
+            $_SESSION["PHONE"] = $customer->phone;
+            $_SESSION["BIRTH_DATE"] = $customer->birth_date;
+            $_SESSION["CUSTOMER_ID"] = $customer->customer_id;
             header("Location:index.php");
         }
         // si $validacion es falso...

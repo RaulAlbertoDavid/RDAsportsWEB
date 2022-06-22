@@ -14,3 +14,7 @@ class booking_controller {
         return booking_model::delete($customer_id, $session_id);
     }
 }
+
+$controlador = new booking_controller();
+require_once("booking_forms/add_booking.php");
+require_once("booking_forms/delete_booking.php");
