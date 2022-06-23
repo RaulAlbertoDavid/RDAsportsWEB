@@ -1,5 +1,6 @@
 <?php
 
+require_once("conexion/conexion.php");
 class booking_model {
     public $customer_id;
     public $session_id;
