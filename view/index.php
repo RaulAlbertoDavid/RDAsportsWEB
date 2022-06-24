@@ -45,18 +45,15 @@ require_once("../controller/booking_controller.php");
 
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
-        }
-        ?>
-        <div class="tabla">
-        <h4>Clases en las que estás inscrito</h4>
+        } ?>
 
         <?php
         $sql = "SELECT s.SESSION_ID, s.DATE_TIME, s.DURATION, s.CAPACITY, s.LEVEL, ac.NAME AS ACTIVITY, ar.NAME AS AREA, ar.NUMBER AS NUM, e.NAME AS EMPLOYEE FROM sessions s INNER JOIN activities ac ON s.activity_id = ac.activity_id INNER JOIN areas ar ON s.area_id = ar.area_id INNER JOIN employees e ON s.employee_id = e.employee_id WHERE s.session_id = ANY (SELECT sc.sessions_session_id FROM sessions_customers sc WHERE sc.customers_customer_id = ". $_SESSION["CUSTOMER_ID"] .")";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) { ?>
-             <table>
-                 <thead>
+        $result = $conn->query($sql); ?>
+        <div class="tabla">
+        <h4>Clases en las que estás inscrito</h4>
+         <table>
+             <thead>
                     <tr>
                         <th class="head column_big">Actividad</th>
                         <th class="head column_small">Fecha</th>
@@ -70,6 +67,7 @@ require_once("../controller/booking_controller.php");
                     </tr>
                  </thead>
                  <tbody id="tabla1"><?php
+             if ($result->num_rows > 0) {
                 while($row = $result->fetch_array()) {
                     $sql_count = "SELECT sc.CUSTOMERS_CUSTOMER_ID AS c FROM sessions_customers sc WHERE sc.SESSIONS_SESSION_ID = " . $row["SESSION_ID"];
                     $count = $conn->query($sql_count);
@@ -79,7 +77,7 @@ require_once("../controller/booking_controller.php");
                         <th class="column_big"><?php echo $row["ACTIVITY"] ?></th>
                         <th class="column_small"><?php echo $date ?></th>
                         <th class="column_small"><?php echo $hour ?></th>
-                        <th class="column_small"><?php echo $row["AREA"] . " (" . $row["NUM"] . ")" ?></th>
+                        <th class="column_small"><?php echo $row["AREA"] ?></th>
                         <th class="column_big"><?php echo $row["EMPLOYEE"] ?></th>
                         <th class="column_small"><?php echo $row["DURATION"] ?> min</th>
                         <th class="column_small"><?php echo $row["LEVEL"] ?></th>
@@ -92,17 +90,15 @@ require_once("../controller/booking_controller.php");
                             </form>
                         </th>
                     </tr>
-                <?php } ?>
+                <?php }} ?>
                  </tbody>
             </table>
-        <?php } ?>
         </div>
-        <div class="tabla">
-        <h4 id="asd">Clases disponibles</h4>
         <?php
         $sql = "SELECT s.SESSION_ID, s.DATE_TIME, s.DURATION, s.CAPACITY, s.LEVEL, ac.NAME AS ACTIVITY, ar.NAME AS AREA, ar.NUMBER AS NUM, e.NAME AS EMPLOYEE FROM sessions s INNER JOIN activities ac ON s.activity_id = ac.activity_id INNER JOIN areas ar ON s.area_id = ar.area_id INNER JOIN employees e ON s.employee_id = e.employee_id WHERE s.session_id != ALL (SELECT sc.sessions_session_id FROM sessions_customers sc WHERE sc.customers_customer_id = ". $_SESSION["CUSTOMER_ID"] .")";
-        $result = $conn->query($sql);
-        if ($result->num_rows > 0) { ?>
+        $result = $conn->query($sql); ?>
+        <div class="tabla">
+        <h4 id="asd">Clases disponibles</h4>
             <table>
                 <thead>
                     <tr>
@@ -118,6 +114,7 @@ require_once("../controller/booking_controller.php");
                     </tr>
                 </thead>
             <tbody id="tabla2"><?php
+            if ($result->num_rows > 0) {
             while($row = $result->fetch_array()) {
                 $sql_count = "SELECT sc.CUSTOMERS_CUSTOMER_ID AS c FROM sessions_customers sc WHERE sc.SESSIONS_SESSION_ID = " . $row["SESSION_ID"];
                 $count = $conn->query($sql_count);
@@ -127,7 +124,7 @@ require_once("../controller/booking_controller.php");
                     <th class="column_big"><?php echo $row["ACTIVITY"] ?></th>
                     <th class="column_small"><?php echo $date ?></th>
                     <th class="column_small"><?php echo $hour ?></th>
-                    <th class= "column_small"><?php echo $row["AREA"] . " (" . $row["NUM"] . ")" ?></th>
+                    <th class= "column_small"><?php echo $row["AREA"] ?></th>
                     <th class="column_big"><?php echo $row["EMPLOYEE"] ?></th>
                     <th class="column_small"><?php echo $row["DURATION"] ?> min</th>
                     <th class="column_small"><?php echo $row["LEVEL"] ?></th>
@@ -145,11 +142,9 @@ require_once("../controller/booking_controller.php");
                         </form>
                     </th>
                 </tr>
-            <?php } ?>
+            <?php }} $conn->close(); ?>
                 </tbody>
             </table>
-        <?php }
-        $conn->close(); ?>
         </div>
     </section>
 </body>
