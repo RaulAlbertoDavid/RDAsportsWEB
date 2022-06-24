@@ -55,33 +55,36 @@ require_once("../controller/booking_controller.php");
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) { ?>
-             <table id="tabla1">
-                <tr>
-                    <th class="head column_big">Actividad</th>
-                    <th class="head column_small">Fecha</th>
-                    <th class="head column_small">Hora</th>
-                    <th class="head column_big">Sala</th>
-                    <th class="head column_big">Monitor</th>
-                    <th class="head column_small">Duración</th>
-                    <th class="head column_small">Nivel</th>
-                    <th class="head column_small">Inscritos</th>
-                    <th class="head column_small"></th>
-                </tr><?php
-            while($row = $result->fetch_array()) {
-                $sql_count = "SELECT sc.CUSTOMERS_CUSTOMER_ID AS c FROM sessions_customers sc WHERE sc.SESSIONS_SESSION_ID = " . $row["SESSION_ID"];
-                $count = $conn->query($sql_count);
-                $date = substr($row["DATE_TIME"], 8, 2) . "/" . substr($row["DATE_TIME"], 5, 2);
-                $hour = substr($row["DATE_TIME"], 11, 5); ?>
-                    <tr id="row1<?php echo $row["SESSION_ID"]?>">
+             <table>
+                 <thead>
+                    <tr>
+                        <th class="head column_big">Actividad</th>
+                        <th class="head column_small">Fecha</th>
+                        <th class="head column_small">Hora</th>
+                        <th class="head column_small">Sala</th>
+                        <th class="head column_big">Monitor</th>
+                        <th class="head column_small">Duración</th>
+                        <th class="head column_small">Nivel</th>
+                        <th class="head column_small">Inscritos</th>
+                        <th class="head column_big"></th>
+                    </tr>
+                 </thead>
+                 <tbody id="tabla1"><?php
+                while($row = $result->fetch_array()) {
+                    $sql_count = "SELECT sc.CUSTOMERS_CUSTOMER_ID AS c FROM sessions_customers sc WHERE sc.SESSIONS_SESSION_ID = " . $row["SESSION_ID"];
+                    $count = $conn->query($sql_count);
+                    $date = substr($row["DATE_TIME"], 8, 2) . "/" . substr($row["DATE_TIME"], 5, 2);
+                    $hour = substr($row["DATE_TIME"], 11, 5); ?>
+                    <tr id="row<?php echo $row["SESSION_ID"]?>">
                         <th class="column_big"><?php echo $row["ACTIVITY"] ?></th>
                         <th class="column_small"><?php echo $date ?></th>
                         <th class="column_small"><?php echo $hour ?></th>
-                        <th class="column_big"><?php echo $row["AREA"] . " (" . $row["NUM"] . ")" ?></th>
+                        <th class="column_small"><?php echo $row["AREA"] . " (" . $row["NUM"] . ")" ?></th>
                         <th class="column_big"><?php echo $row["EMPLOYEE"] ?></th>
                         <th class="column_small"><?php echo $row["DURATION"] ?> min</th>
                         <th class="column_small"><?php echo $row["LEVEL"] ?></th>
-                        <th id="capacity1<?php echo $row["SESSION_ID"]?>" class="column_small"><?php echo $count->num_rows  . "/" . $row["CAPACITY"] ?></th>
-                        <th>
+                        <th id="capacity<?php echo $row["SESSION_ID"]?>" class="column_small"><?php echo $count->num_rows  . "/" . $row["CAPACITY"] ?></th>
+                        <th class="column_big">
                             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                                 <input type="hidden" name="customer" value="<?php echo $_SESSION["CUSTOMER_ID"] ?>">
                                 <input type="hidden" name="session" value="<?php echo $row["SESSION_ID"]?>">
@@ -89,7 +92,8 @@ require_once("../controller/booking_controller.php");
                             </form>
                         </th>
                     </tr>
-            <?php } ?>
+                <?php } ?>
+                 </tbody>
             </table>
         <?php } ?>
         </div>
@@ -99,33 +103,36 @@ require_once("../controller/booking_controller.php");
         $sql = "SELECT s.SESSION_ID, s.DATE_TIME, s.DURATION, s.CAPACITY, s.LEVEL, ac.NAME AS ACTIVITY, ar.NAME AS AREA, ar.NUMBER AS NUM, e.NAME AS EMPLOYEE FROM sessions s INNER JOIN activities ac ON s.activity_id = ac.activity_id INNER JOIN areas ar ON s.area_id = ar.area_id INNER JOIN employees e ON s.employee_id = e.employee_id WHERE s.session_id != ALL (SELECT sc.sessions_session_id FROM sessions_customers sc WHERE sc.customers_customer_id = ". $_SESSION["CUSTOMER_ID"] .")";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) { ?>
-            <table id="tabla2">
-                <tr>
-                    <th class="head column_big">Actividad</th>
-                    <th class="head column_small">Fecha</th>
-                    <th class="head column_small">Hora</th>
-                    <th class="head column_big">Sala</th>
-                    <th class="head column_big">Monitor</th>
-                    <th class="head column_small">Duración</th>
-                    <th class="head column_small">Nivel</th>
-                    <th class="head column_small">Inscritos</th>
-                    <th class="head column_small"></th>
-                </tr><?php
+            <table>
+                <thead>
+                    <tr>
+                        <th class="head column_big">Actividad</th>
+                        <th class="head column_small">Fecha</th>
+                        <th class="head column_small">Hora</th>
+                        <th class="head column_small">Sala</th>
+                        <th class="head column_big">Monitor</th>
+                        <th class="head column_small">Duración</th>
+                        <th class="head column_small">Nivel</th>
+                        <th class="head column_small">Inscritos</th>
+                        <th class="head column_big"></th>
+                    </tr>
+                </thead>
+            <tbody id="tabla2"><?php
             while($row = $result->fetch_array()) {
                 $sql_count = "SELECT sc.CUSTOMERS_CUSTOMER_ID AS c FROM sessions_customers sc WHERE sc.SESSIONS_SESSION_ID = " . $row["SESSION_ID"];
                 $count = $conn->query($sql_count);
                 $date = substr($row["DATE_TIME"], 8, 2) . "/" . substr($row["DATE_TIME"], 5, 2);
                 $hour = substr($row["DATE_TIME"], 11, 5); ?>
-                <tr id="row2<?php echo $row["SESSION_ID"]?>">
+                <tr id="row<?php echo $row["SESSION_ID"]?>">
                     <th class="column_big"><?php echo $row["ACTIVITY"] ?></th>
                     <th class="column_small"><?php echo $date ?></th>
                     <th class="column_small"><?php echo $hour ?></th>
-                    <th class= "column_big"><?php echo $row["AREA"] . " (" . $row["NUM"] . ")" ?></th>
+                    <th class= "column_small"><?php echo $row["AREA"] . " (" . $row["NUM"] . ")" ?></th>
                     <th class="column_big"><?php echo $row["EMPLOYEE"] ?></th>
                     <th class="column_small"><?php echo $row["DURATION"] ?> min</th>
                     <th class="column_small"><?php echo $row["LEVEL"] ?></th>
-                    <th id="capacity2<?php echo $row["SESSION_ID"]?>" class="column_small"><?php echo $count->num_rows . "/" . $row["CAPACITY"] ?></th>
-                    <th>
+                    <th id="capacity<?php echo $row["SESSION_ID"]?>" class="column_small"><?php echo $count->num_rows . "/" . $row["CAPACITY"] ?></th>
+                    <th class="column_big">
                         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" role="form" id="contactForm">
                             <input type="hidden" name="customer" value="<?php echo $_SESSION["CUSTOMER_ID"] ?>">
                             <input type="hidden" name="session" value="<?php echo $row["SESSION_ID"]?>">
@@ -139,6 +146,7 @@ require_once("../controller/booking_controller.php");
                     </th>
                 </tr>
             <?php } ?>
+                </tbody>
             </table>
         <?php }
         $conn->close(); ?>
@@ -164,16 +172,15 @@ require_once("../controller/booking_controller.php");
                     success: function(data) {
                         event.target.value = "Inscribirse";
                         event.target.id = "b2" + id;
-                        let capacity = document.getElementById("capacity1" + id).innerHTML;
+                        let capacity = document.getElementById("capacity" + id).innerHTML;
                         let barra = capacity.indexOf("/");
                         let apuntados = capacity.substring(0, barra);
                         let total = capacity.substring(barra + 1);
                         apuntados--;
-                        document.getElementById("capacity1" +id).innerHTML = apuntados + "/" + total;
-                        let fila = document.getElementById("row1" + id);
-                        fila.id = "row2" + id;
+                        document.getElementById("capacity" +id).innerHTML = apuntados + "/" + total;
                         let tabla = document.getElementById("tabla2");
-                        tabla.innerHTML = tabla.innerHTML + fila.innerHTML;
+                        let fila = document.getElementById('row' + id);
+                        tabla.innerHTML = tabla.innerHTML + "<tr id='row" + id + "'>" + fila.innerHTML + "</tr>";
                         fila.remove();
                     },
                     error: function(xhr, status, error) {
@@ -192,16 +199,15 @@ require_once("../controller/booking_controller.php");
                     success: function(data) {
                         event.target.value = "Eliminar";
                         event.target.id = "b1" + id;
-                        let capacity = document.getElementById("capacity2" + id).innerHTML;
+                        let capacity = document.getElementById("capacity" + id).innerHTML;
                         let barra = capacity.indexOf("/");
                         let apuntados = capacity.substring(0, barra);
                         let total = capacity.substring(barra + 1);
                         apuntados++;
-                        document.getElementById("capacity2" +id).innerHTML = apuntados + "/" + total;
-                        let fila = document.getElementById("row2" + id);
-                        fila.id = "row1" + id;
+                        document.getElementById("capacity" +id).innerHTML = apuntados + "/" + total;
                         let tabla = document.getElementById("tabla1");
-                        tabla.innerHTML = tabla.innerHTML + fila.innerHTML;
+                        let fila = document.getElementById('row' + id);
+                        tabla.innerHTML = tabla.innerHTML + "<tr id='row" + id + "'>" + fila.innerHTML + "</tr>";
                         fila.remove();
                     },
                     error: function(xhr, status, error) {
