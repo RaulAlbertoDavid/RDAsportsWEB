@@ -71,7 +71,7 @@ require_once("../controller/employee_controller.php");
                         $result = $conn->query($sql);
                         if ($result->num_rows > 0) {
                             while($row = $result->fetch_array()) { ?>
-                                <option value="<?php echo $row["AREA_ID"] ?>"><?php echo $row["NAME"] . " - " . $row["NUMBER"] ?>  </option>
+                                <option value="<?php echo $row["AREA_ID"] ?>"><?php echo $row["NAME"] ?>  </option>
                             <?php }} ?>
                     </select>
                 </label>
