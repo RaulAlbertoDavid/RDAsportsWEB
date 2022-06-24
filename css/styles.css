@@ -8,6 +8,7 @@
 body {
     height: 500px;
     background-color: #cccccc;
+    margin-bottom: 20px;
 }
 
 section {
@@ -266,16 +267,13 @@ h4 {
 
 }
 
-tr:nth-child(even) {
-    background-color: #e1e1e1;
-}
-
 tr {
     height: 30px;
 }
 
 .head {
     font-weight: bolder;
+    background-color: #e1e1e1;
 }
 
 th {
