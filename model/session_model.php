@@ -8,6 +8,7 @@ class session_model {
     public $activity_id;
     public $area_id;
     public $date_time;
+    public $duration;
     public $capacity;
     public $level;
 
@@ -20,13 +21,14 @@ class session_model {
      * @param $capacity
      * @param $level
      */
-    public function __construct($session_id, $employee_id, $activity_id, $area_id, $date_time, $capacity, $level)
+    public function __construct($session_id, $employee_id, $activity_id, $area_id, $date_time, $duration, $capacity, $level)
     {
         $this->session_id = $session_id;
         $this->employee_id = $employee_id;
         $this->activity_id = $activity_id;
         $this->area_id = $area_id;
         $this->date_time = $date_time;
+        $this->duration = $duration;
         $this->capacity = $capacity;
         $this->level = $level;
     }
@@ -38,9 +40,9 @@ class session_model {
                 return $conexion;
             }
 
-            $sql = "INSERT INTO SESSIONS (EMPLOYEE_ID, ACTIVITY_ID, AREA_ID, DATE_TIME, CAPACITY, LEVEL) VALUES (:EMP, :ACT, :ARE, :DAT, :CAP, :LVL)";
+            $sql = "INSERT INTO SESSIONS (EMPLOYEE_ID, ACTIVITY_ID, AREA_ID, DATE_TIME, DURATION, CAPACITY, LEVEL) VALUES (:EMP, :ACT, :ARE, :DAT, :DUR, :CAP, :LVL)";
             $respuesta = $conexion->prepare($sql);
-            return $respuesta->execute(array(":EMP"=>$session->employee_id, ":ACT"=>$session->activity_id, ":ARE"=>$session->area_id, ":DAT"=>$session->date_time, ":CAP"=>$session->capacity, ":LVL"=>$session->level));
+            return $respuesta->execute(array(":EMP"=>$session->employee_id, ":ACT"=>$session->activity_id, ":ARE"=>$session->area_id, ":DAT"=>$session->date_time, ":DUR"=>$session->duration, ":CAP"=>$session->capacity, ":LVL"=>$session->level));
 
             $respuesta->closeCursor();
             $conexion = null;
